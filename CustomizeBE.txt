@@ -1,0 +1,3 @@
+    #BE_name,pam,start,end,BE_type,stream
+    BE4(max),NGG,13,17,CBE,U
+    BE3,NGNNR,13,18,CBE,U
