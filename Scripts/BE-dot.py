@@ -4,16 +4,6 @@ import csv
 import sys,argparse
 from Scripts.BEMain import BEMain
 from Scripts.BEsingle import BEsingle
-#    args
-#    提供rsID,1.数据集有的，已经分析得到的clean quiet matches 结果文件
-#            2.数据集没有的，提示输入50mer
-#    ***提供50mer(upSeq, downSeq, mutation, wt, readingFrame), 参考脚本: besingle.py
-#    允许用户custormize, BE类型(personalPAM,start,end,fromto,stream)，参考脚本：besingle.py, (BElist.update())
-#    default=None
-
-#    BEminorlist忽略
-
-#    把rs 和50 mer两种输入形式分开写
 
 
 def importCustomizeBE(CustomizeBE):
