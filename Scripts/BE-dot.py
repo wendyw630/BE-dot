@@ -2,8 +2,8 @@
 from Bio.Seq import Seq
 import csv
 import sys,argparse
-from Scripts.BEMain import BEMain
-from Scripts.BEsingle import BEsingle
+from Scripts.BErsID import BErsID
+from Scripts.BE50mer import BE50mer
 
 
 def importCustomizeBE(CustomizeBE):
@@ -41,9 +41,9 @@ def if_snp_in_DB(DBfile,jobID,seq5,seq3,mut,wt,readingFrame):#in ".csv" format
         csv_write = csv.writer(fout, dialect='excel') #dialect='excel'...........
         csv_write.writerow(matchedlt)
         fout.close()
-        BEMain(r'/home/wzl/test/predict/script/BE-FF/Scripts/snp_in_DB.csv') #...........
+        BErsID(r'/home/Scripts/snp_in_DB.csv') #...........
     else:
-        BEsingle(jobID,seq5,seq3,mut,wt,readingFrame) ## vary-version of BEMain
+        BE50mer(jobID,seq5,seq3,mut,wt,readingFrame) ## vary-version of BEMain
 
 # ['\ufeff', 'SNP ID', 'Genome assembly', 'chromosome', 'orientation', 'start_pos', 'end_pos', '5Xmer', 'Clinical significance', 'SNP', 'residue', 'var type', 'Gene name', 'Gene ID', 'readingFrame', 'aaPosition', 'condition']
 # ['rs28937596', 'rs28937596', 'GRCh38.p7', '3', '+', '184144111', '184144111', 'CTTTCTTCCATAGCTGCTAAAGGCCTGGAGCCCTGTTTTTAGGAACTACAT', 'pathogenic', 'T>C', 'W>R', 'missense', 'EIF2B5', '8893', '1', '628', 'Leukoencephalopathy with vanishing white matter (VWM)']
@@ -111,7 +111,7 @@ def main():
     if args.CustomizeBE !=None:
         CustomizeBE=args.CustomizeBE
         importCustomizeBE(CustomizeBE)
-    DBfile=r'/home/wzl/test/predict/script/BE-FF/snps_with_clinvar2.csv'
+    DBfile=r'/home/snps_with_clinvar2.csv'
     [jobID, seq5, seq3, mut, wt, readingFrame]=[args.jobID,args.upSeq,args.downSeq,args.mutation,args.wt,args.readingFrame]
     if_snp_in_DB(DBfile, jobID, seq5, seq3, mut, wt, readingFrame)
 
