@@ -1,7 +1,8 @@
 # BE-dot
 a comprehensive tool for sgRNA design and OT profile prediction
 ## Usage:
-' BE-dot.py [-h] [--jobID JOBID] [--upSeq <seq>] [--downSeq <seq>]
+'''
+BE-dot.py [-h] [--jobID JOBID] [--upSeq <seq>] [--downSeq <seq>]
                  [--mutation MUTATION] [--wt WT] [--readingFrame <int>]
                  [--rsID RSID] [--CustomizeBE <file>] [--guide <seq>]
                  [--pam <seq>] [--target_genome <file>] [--BE_name BE_NAME]
@@ -39,4 +40,5 @@ optional arguments:
 
 ### enumerate all the OT editing products, generating avinput file:
   --BE_name BE_NAME     the selected BE in former OT prediction step
-  --OTs_file <file>     OTs file'
+  --OTs_file <file>     OTs file
+  '''
