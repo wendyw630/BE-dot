@@ -4,7 +4,7 @@ CBElist={
     "BE2": ["NGG",13,17,"C","T","U"],
     "BE3": ["NGG",13,17,"C","T","U"],
     "HF-BE3": ["NGG",13,17,"C","T","U"],
-    "BE4(max)": ["NGG",13,17,"C","T","U"],########  v
+    "BE4(max)": ["NGG",13,17,"C","T","U"],#
     "BE4-Gam": ["NGG",13,17,"C","T","U"],
     "YE1-BE3": ["NGG",14,16,"C","T","U"],
     "YEE-BE3": ["NGG",15,15,"C","T","U"],
@@ -14,18 +14,17 @@ CBElist={
     "SaBE4": ["NNGRRT",10,19,"C","T","U"],
     "SaBE4-Gam": ["NNGRRT",10,19,"C","T","U"],
     "Sa(KKH)-BE3": ["NNNRRT",10,19,"C","T","U"],
-    #"Cas12a-BE": ["TTTV",10,12,"C","T","D"], #### wzl_note: D
     "Target-AID": ["NGG",17,19,"C","T","U"],
     "Target-AID-NG": ["NG",17,19,"C","T","U"],
     "xBE3": ["NG",13,17,"C","T","U"],
     "eA3A-BE3": ["NGG",13,17,"C","T","U"], #special case, only when C comes after T
     "BE-PLUS": ["NGG",7,17,"C","T","U"],
-    "CP-CBEmax variants": ["NGG",8,17,"C","T","U"], ## wzl_changed wind
+    "CP-CBEmax variants": ["NGG",8,17,"C","T","U"], ## 
     "evoAPOBEC1-BE4max": ["NGG",13,18,"C","T","U"],
     "evoFERNY-BE4max": ["NGG",13,18,"C","T","U"],
     "evoCDA1-BE4max": ["NGG",9,20,"C","T","U"],
-    "SpRY-BE4max":["NRN",12,18,"C","T","U"], ### wzl_add,3-9site   vvvvv
-    "SpRY-PmCDA1":["NRN",15,20,"C","T","U"] ### wzl_add,1-6site,[plant]
+    "SpRY-BE4max":["NRN",12,18,"C","T","U"], ###
+    "SpRY-PmCDA1":["NRN",15,20,"C","T","U"] ### 
 
 }
 
@@ -40,9 +39,9 @@ ABElist={
     "VQR-ABE": ["NGA",15,17, "A","G","U"],
     "VRER-ABE": ["NGCG",15,17, "A","G","U"],
     "Sa(KKH)-ABE": ["NNNRRT",10,16, "A","G","U"],
-    "ABE8e":["NGG",13,17,"A","G","U"], ## wzl_add
-    "CP-ABEmax variants":["NGG",11,17, "A","G","U"],##  wzl_changed wind
-    "SpRY-ABE8e":["NRN",13,17,"A","G","U"], ## wzl_add,4-8site,[plant] ########## vvvvvv
+    "ABE8e":["NGG",13,17,"A","G","U"], #
+    "CP-ABEmax variants":["NGG",11,17, "A","G","U"],##  
+    "SpRY-ABE8e":["NRN",13,17,"A","G","U"], ## 
 
 }
 
