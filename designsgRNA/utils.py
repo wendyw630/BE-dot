@@ -1,45 +1,55 @@
-from BE_dot.dot_baseEditorsTable import CBElist,  ABElist, BEletter
-from BE_dot.snpClass import snp_define,supo_snp_define
-from BE_dot.dot_fetchrsID import get_rsIDsnp
-#from BE_dot.dot_BEsingle_presyn12 import precise_syn12_correct
-#from BE_dot.dot_BEsinglesyn3 import syn3_correct
-# function name changed to: precise_correct(snp) synonymous3(snp)
+from designsgRNA.baseEditorsTable import CBElist,  ABElist, BEletter
+from designsgRNA.snpClass import snp_define,supo_snp_define
+from designsgRNA.fetchrsID import get_rsIDsnp
+
 
 from Bio.Seq import Seq
 import csv
 import re
 import copy
 ###############################################################
-'ABE', 'ABE-CP1040', 'BE4', \
-'BE4-CP1028', 'AID', 'CDA', 'eA3A', 'evoAPOBEC', 'eA3A-T44DS45A', 'BE4-H47ES48A', 'eA3A-T31A', 'eA3A-T31AT44A', 'BE4-H47ES48A'
+
 hive_dic={
-    "ABE7.10":"ABE",
     "BE4(max)":"BE4",
-    "AID",
-
-
+    "eA3A-BE3":"eA3A",
+    "CP-CBEmax variants":"BE4-CP1028",
+    "evoAPOBEC1-BE4max":"evoAPOBEC",
+    "AID-BE4max":"AID",
+    "CDA1-BE4max":"CDA",
+    "ABE7.10":"ABE",
+    "CP-ABEmax variants":"ABE-CP1040"
 }
 
-CCAGGGAGCAGTGGGCTGGCCGCGCG
-CGGGCTGTGCGTCCTGGGGGAGGAC
-
-import sys
-sys.path.append('/home/wzl/test/predict/BE-hive/')
-from be_predict_efficiency import predict as be_efficiency_model
-def hive_score(be,snp,grna): #
+def hive_score(be, seq5,seq3,mut, grna): #
     pred_d=None
+    if be in CBElist:
+        BElist=CBElist
+    else:
+        BElist=ABElist
     if be in hive_dic:
         hive_be=hive_dic[be]
-        full_seq=snp.seq5+snp.mut+snp.seq3
-        grna_startcor=re.search(grna,full_seq).span()[0]
-        seq=full_seq[grna_startcor-20:grna_startcor+30]
+        full_seq=seq5+mut+seq3
+        grna_seg=grna[-(BElist[be][1]-1):]
 
-        be_efficiency_model.init_model(base_editor=hive_be, celltype='mES')
-        pred_d = str(be_efficiency_model.predict(seq))
+        if re.search(grna_seg,full_seq): ## rc_flag=False
+            pass
+        else:  ## rc_flag=True
+            full_seq = Seq(full_seq).reverse_complement()
+        try:
+            seg_end_cor = re.search(grna_seg, full_seq).span()[1]
+            seq=full_seq[seg_end_cor-40 : seg_end_cor+10]
+            print("seq to writein hive",seq)
+        except Exception as e:
+            print(str(e))
+
+        #be_efficiency_model.init_model(base_editor=hive_be, celltype='mES')
+        #pred_d = str(be_efficiency_model.predict(seq))
+        pred_d="k"
     else:
         pred_d="unknown"
 
     return pred_d
+
 def cut_3nlen(snp):  ### from dot_BEsinglesyn3.py
     f1 = lambda x, i: x%((x // 3 - 1) * 3 + (i-1))## x: seq_len; i: readingframe
     f2 = lambda x,i: (x // 3 - 1) * 3 + (3-i)
@@ -64,39 +74,38 @@ def synonymous12(snp,rc_flag,under_editing_cor,BElist,BE):
         under_editing_seq=snp.seq5[under_editing_cor[0]:]+snp.mut+snp.seq3[:under_editing_cor[1]]
     else:
         under_editing_seq=snp.mut+snp.seq3[:under_editing_cor[1]]
-    after_editing_seq=None;after_full_seq=None #####!!!!!!!!!!!!!!!!
+    after_editing_seq=None;after_full_seq=None 
     if BElist[BE][3]=='C':
         after_editing_seq=under_editing_seq.replace('C','T')
-        #@  print("after_editing_seq:\t", after_editing_seq)
+        #print("after_editing_seq:\t", after_editing_seq)
     if BElist[BE][3]=='A':
         after_editing_seq=under_editing_seq.replace('A','G')
-        #@  print("after_editing_seq:\t", after_editing_seq)
+        #print("after_editing_seq:\t", after_editing_seq)
     ### ref_full_seq, after_full_seq:
     ref_full_seq12=snp.seq5+snp.wt+snp.seq3## under_full_seq=snp.seq5+snp.mut+snp.seq3
     if under_editing_cor[0] != 0 and after_editing_seq:
-        after_full_seq=snp.seq5[:under_editing_cor[0]]+after_editing_seq+snp.seq3[under_editing_cor[1]:] ## .....
+        after_full_seq=snp.seq5[:under_editing_cor[0]]+after_editing_seq+snp.seq3[under_editing_cor[1]:] 
     elif under_editing_cor[0] == 0 and after_editing_seq:
         after_full_seq =snp.seq5+after_editing_seq+snp.seq3[under_editing_cor[1]:]
 
-    if after_full_seq: #### !!!!! 容易写错为if not after_full_seq
-        #print(type(after_full_seq))
+    if after_full_seq: 
         if rc_flag==False:
-            aa_ref_full_seq=Seq(ref_full_seq12).translate()## not!!!  aa_under_full_seq
+            aa_ref_full_seq=Seq(ref_full_seq12).translate()
             aa_after_full_seq=Seq(after_full_seq).translate()
         else: ### if rc_flag==True
-            aa_ref_full_seq = Seq(ref_full_seq12).reverse_complement().translate()  ## not!!!  aa_under_full_seq
+            aa_ref_full_seq = Seq(ref_full_seq12).reverse_complement().translate()  
             aa_after_full_seq = Seq(after_full_seq).reverse_complement().translate()
 
         if aa_ref_full_seq==aa_after_full_seq:
             synonymous12_flag=True
-        #@  print("ref_full_seq\t",ref_full_seq12,"\nlen(ref_full_seq)\t",len(ref_full_seq12))
-        #@  print("after_full_seq\t", after_full_seq, "\nlen(after_full_seq)\t", len(after_full_seq))
-        #@  print('synonymous12_flag:',synonymous12_flag)
+        #print("ref_full_seq\t",ref_full_seq12,"\nlen(ref_full_seq)\t",len(ref_full_seq12))
+        #print("after_full_seq\t", after_full_seq, "\nlen(after_full_seq)\t", len(after_full_seq))
+        #print('synonymous12_flag:',synonymous12_flag)
 
     return synonymous12_flag
 def precise_syn12_correct(snp):
-    snp = cut_3nlen(snp) ## !!!!!!! prepare for synonymous12
-    #@  print(snp)
+    snp = cut_3nlen(snp) 
+    #print(snp)
     ### ABE or CBE:
     rc_flag=False
     if snp.mut == "T":
@@ -124,11 +133,11 @@ def precise_syn12_correct(snp):
     #######################################
     ### precise correction or synonymous12
     precise_snp_be_grna = {};synonymous12_snp_be_grna = {}
-    precise_snp_be_grna[snp.jobid] = {};synonymous12_snp_be_grna[snp.jobid] = {}  ####  wzl_note  !!!!!!!! 不加此命名，KeyError: 'rs80357410'
+    precise_snp_be_grna[snp.jobid] = {};synonymous12_snp_be_grna[snp.jobid] = {}  
     precise_be_grna = {};synonymous12_be_grna = {}
     if BElist:
         for BE in BElist:  ## eg of BE: "BE4(max)": ["NGG",13,17,"C","T","U"]
-            #@  print("BE:\n", BE)
+            #print("BE:\n", BE)
             precise_be_grna[BE]=[];synonymous12_be_grna[BE] = []
             if BElist[BE][5] == "U":
                 act_wind_range = BElist[BE][2] - BElist[BE][1] + 1
@@ -157,7 +166,7 @@ def precise_syn12_correct(snp):
                     ### if pam match:
                     pamFlag = False
                     base_count = 0
-                    if len(pam_seq) == pam_len:  ###!!!!!!!!
+                    if len(pam_seq) == pam_len: 
                         for j in range(pam_len):
                             if pam_seq[j] in BEletter[BEpam[j]]:
                                 base_count += 1
@@ -174,9 +183,9 @@ def precise_syn12_correct(snp):
                         # print(under_editing_seq)
 
                     if len(under_editing_seq.replace(BElist[BE][3], '')) + 1 < len(under_editing_seq) or snp.wt != \
-                            BElist[BE][4] : #!!!!!!!!!!!!!!!! synonynous case1 or case2
+                            BElist[BE][4] : 
                         ## synonymous case 1 ,case2
-                        #@  print("try synonymous12\n")
+                        #print("try synonymous12\n")
                         synonymous12Flag = synonymous12(snp,rc_flag, under_editing_cor, BElist,BE)
 
                     ################# output dict ################
@@ -230,7 +239,6 @@ def suposnp_reffullseq_cut_3nlen(snp,supo_snp,ref_full_seq):
 
 def match_pam_wind(snp,base2edit,BElist):
     BE_windCorGrnaPam_d={}
-    ### keypoint: if matchFlag and grna_seq and pam_seq: BE_windCorGrnaPam_d[BE].append([under_editing_cor,grna_seq,pam_seq])
     for BE in BElist:
         BE_windCorGrnaPam_d[BE]=[]
         if BElist[BE][5] == "U":
@@ -270,13 +278,12 @@ def match_pam_wind(snp,base2edit,BElist):
                 ## if base2edit in wind
                 baseFlag=False
                 #print("type of under_editing_seq",type(under_editing_seq))
-                if len(under_editing_seq.replace(base2edit,''))<len(under_editing_seq):  ## can't use re module, type(under_editing_seq): <class 'Bio.Seq.Seq'>
+                if len(under_editing_seq.replace(base2edit,''))<len(under_editing_seq):  
                     baseFlag=True
                 if (pamFlag==True and baseFlag==True):
                     matchFlag = True
                 if matchFlag and grna_seq and pam_seq: ### !!!!!!!!!!!!!!!!!
-                    BE_windCorGrnaPam_d[BE].append([under_editing_cor,grna_seq,pam_seq])### under_editing_cor is a []
-                    ### eg: for i in dta['be3']: print(i)   >>> [[1, 4], 'AAACCCCCC', 'TGG']
+                    BE_windCorGrnaPam_d[BE].append([under_editing_cor,grna_seq,pam_seq])
     return BE_windCorGrnaPam_d
 
 def syn3_correct(snp):
@@ -316,13 +323,13 @@ def syn3_correct(snp):
     ######  {} synonymous3_snp_be_grna   #########
     synonymous3_snp_be_grna = {}
     synonymous3_be_grna = {}
-    synonymous3_snp_be_grna[snp.jobid] = {}  ####  wzl_note  !!!!!! 不加此命名，KeyError
+    synonymous3_snp_be_grna[snp.jobid] = {}  
 
     for i in [0,1]:
-        supo_snp,ref_full_seq=suposnp_reffullseq_cut_3nlen(snp,supo_snp_l[i],ref_full_seq_l[i]) ##### !!!!!!!!!
+        supo_snp,ref_full_seq=suposnp_reffullseq_cut_3nlen(snp,supo_snp_l[i],ref_full_seq_l[i]) 
         #print("i of supo_snp,ref_full_seq:",i,"\n***",supo_snp,"\n***",ref_full_seq)
         ###### BElist=ABE or CBE; if rc_flag: rc-supo_snp, rc-ref_full_seq
-        rc_flag=False ### !!!!!!!!!!!!!!!!!!!!!!
+        rc_flag=False 
         if supo_snp.wt=='C':
             BElist=CBElist
         elif supo_snp.wt=='G':
@@ -331,7 +338,7 @@ def syn3_correct(snp):
             rc_snp_seq3 = Seq(supo_snp.seq5).reverse_complement()
             rc_snp_wt = "C"
             supo_snp = supo_snp_define(supo_snp.jobid, rc_snp_seq5, rc_snp_seq3, rc_snp_wt, supo_snp.readingframe)
-            ref_full_seq=Seq(ref_full_seq).reverse_complement() ### !!!!!!!!!!!!!!!!!!!!!
+            ref_full_seq=Seq(ref_full_seq).reverse_complement() 
             rc_flag=True
         elif supo_snp.wt == 'A':
             BElist = ABElist
@@ -341,11 +348,11 @@ def syn3_correct(snp):
             rc_snp_seq3 = Seq(supo_snp.seq5).reverse_complement()
             rc_snp_wt = "A"
             supo_snp = supo_snp_define(supo_snp.jobid, rc_snp_seq5, rc_snp_seq3, rc_snp_wt, supo_snp.readingframe)
-            ref_full_seq = Seq(ref_full_seq).reverse_complement() ### !!!!!!!!!!!!!!!!!!!!!
+            ref_full_seq = Seq(ref_full_seq).reverse_complement() 
             rc_flag = True
         else:
             BElist=None
-        if i==0 and BElist!=None:### !!!!!!!!!!!!!!!!!!!! to give an initila-value & inherit i==0 when i==1
+        if i==0 and BElist!=None:
             for BE in BElist:
                 synonymous3_be_grna[BE]=[]
         elif i==1 and BElist!=None:
@@ -361,13 +368,13 @@ def syn3_correct(snp):
         ######################################################
         ## match_pam_wind(): in: snp, base2edit, BElist :
         BE_windCorGrnaPam_d=match_pam_wind(supo_snp, supo_snp.wt, BElist)
-        #@  print("BE_windCorGrnaPam_d:\t",BE_windCorGrnaPam_d)
+        #print("BE_windCorGrnaPam_d:\t",BE_windCorGrnaPam_d)
 
         for BE in BE_windCorGrnaPam_d.keys():
             #synonymous3_be_grna[BE]=[] ^
-            #@  print("BE:\n", BE)
-            for windCorGrnaPam_l in BE_windCorGrnaPam_d[BE]: ### windCorGrnaPam_l is a list:[[cor_down,cor_up],grna,pam]
-                under_editing_cor= windCorGrnaPam_l[0] ### under_editing_cor is a list:[cor_down,cor_up]
+            #print("BE:\n", BE)
+            for windCorGrnaPam_l in BE_windCorGrnaPam_d[BE]: 
+                under_editing_cor= windCorGrnaPam_l[0] 
                 synonymous3_flag=False
                 ### under_editing_seq, after_editing_seq;  ref_full_seq, after_full_seq:
                 if under_editing_cor[0] != 0:
@@ -375,7 +382,7 @@ def syn3_correct(snp):
                 else:
                     under_editing_seq = supo_snp.wt + supo_snp.seq3[:under_editing_cor[1]]
 
-                after_editing_seq = None;after_full_seq = None  #####!!!!!!!!!!!!!!!!
+                after_editing_seq = None;after_full_seq = None  
                 if BElist[BE][3] == 'C':
                     after_editing_seq = under_editing_seq.replace('C', 'T')
                     #print("after_editing_seq:\t", after_editing_seq)
@@ -384,17 +391,17 @@ def syn3_correct(snp):
                     #print("after_editing_seq:\t", after_editing_seq)
                 ### ref_full_seq, after_full_seq:
                 if under_editing_cor[0] != 0 and after_editing_seq:
-                    after_full_seq = supo_snp.seq5[:under_editing_cor[0]] + after_editing_seq + supo_snp.seq3[under_editing_cor[1]:]  ## .....
+                    after_full_seq = supo_snp.seq5[:under_editing_cor[0]] + after_editing_seq + supo_snp.seq3[under_editing_cor[1]:]  
                 elif under_editing_cor[0] == 0 and after_editing_seq:
                     after_full_seq = supo_snp.seq5 + after_editing_seq + supo_snp.seq3[under_editing_cor[1]:]
 
-                if after_full_seq:  #### !!!!! 容易写错为if not after_full_seq
-                    #@  print("ref_full_seq:\t",ref_full_seq,"\nafter_full_seq:\t",after_full_seq)
+                if after_full_seq:  
+                    #print("ref_full_seq:\t",ref_full_seq,"\nafter_full_seq:\t",after_full_seq)
                     if rc_flag==False:
-                        aa_ref_full_seq = Seq(ref_full_seq).translate()  ## aa_ref_full_seq, not  aa_under
+                        aa_ref_full_seq = Seq(ref_full_seq).translate()  
                         aa_after_full_seq = Seq(after_full_seq).translate()
                     else:  ##ie rc_flag==True
-                        aa_ref_full_seq = Seq(ref_full_seq).reverse_complement().translate()  ## aa_ref_full_seq, not  aa_under
+                        aa_ref_full_seq = Seq(ref_full_seq).reverse_complement().translate()  
                         aa_after_full_seq = Seq(after_full_seq).reverse_complement().translate()
                     if aa_ref_full_seq == aa_after_full_seq:
                         synonymous3_flag = True
@@ -402,9 +409,9 @@ def syn3_correct(snp):
                         pam_seq=windCorGrnaPam_l[2]
                         pam_seq = pam_seq.lower()
                         synonymous3_be_grna[BE].append(grna_seq + pam_seq)
-            #@  print('synonymous3_be_grna:\t',synonymous3_be_grna) ## for i in [0,1]; for BE in BE_windCorGrnaPam_d
+            #print('synonymous3_be_grna:\t',synonymous3_be_grna) ## for i in [0,1]; for BE in BE_windCorGrnaPam_d
         synonymous3_snp_be_grna[snp.jobid].update(synonymous3_be_grna) ## for i in [0,1]
-    #@  print('synonymous3_snp_be_grna:\t',synonymous3_snp_be_grna)
+    #print('synonymous3_snp_be_grna:\t',synonymous3_snp_be_grna)
         #except:
          #   print("don't run synonymous3 search")
     return synonymous3_snp_be_grna
@@ -426,7 +433,7 @@ def re_extract(dic_snp_be):
     pattern=re.compile(r'\'([AGCTagct]{20,})\'')
     result=pattern.findall(target_str)
     return result
-def filewrite(snpin,outPath):
+def filewrite(snpin,outPath,seq5,seq3, mut):
     precise = {};synonymous12 = {}
     synonymous3 = {}
     synonymous123={}
@@ -457,11 +464,11 @@ def filewrite(snpin,outPath):
     print("********* synonymous123:\n",synonymous123)
     print("********* allmatch:\n", allmatch)
     ################  writeout  ##################
-    with open("{0}/{1}_cleanMatches_file.txt".format(outPath,jobid), mode='w') as fout: # r'D:\00_project\predict\BE_dot\results\{0}_cleanMatches_file.txt'
+    with open("{0}/{1}_cleanMatches_file.txt".format(outPath,jobid), mode='w') as fout: 
         fout.write("snp\tprecise_BE-grna\n")
-        #@  print("********precise*******",precise)
-        dic=copy.deepcopy(precise) #!!!!!!!!!!
-        #@  print("********dic of precise*******", dic)
+        #print("********precise*******",precise)
+        dic=copy.deepcopy(precise) 
+        #print("********dic of precise*******", dic)
         for snp in dic:
             fout.write("%s\t" % snp)
             for BE in dic[snp]:
@@ -469,13 +476,13 @@ def filewrite(snpin,outPath):
                     fout.write("%s:" % BE)
                     grna_l = re_extract(dic[snp][BE])
                     for grna in grna_l:
-                        hive=hive_score(BE,snp,grna)
-                    #@  print('grna_l:', grna_l)
+                        hive=hive_score(BE, seq5,seq3,mut, grna)
+                    #print('grna_l:', grna_l)
                         fout.write("%s efficiency: %s " % (grna,hive))
                 fout.write("\t")
             fout.write("\n")
 
-    with open("{0}/{1}_quietMatches_file.txt".format(outPath,jobid), mode='w') as fout: # r'D:\00_project\predict\BE_dot\results\{0}_quietMatches_file.txt
+    with open("{0}/{1}_quietMatches_file.txt".format(outPath,jobid), mode='w') as fout: 
         fout.write("snp\tsynonymous_BE-grna\n")
         dic=copy.deepcopy(synonymous123)
         for snp in dic:
@@ -485,24 +492,24 @@ def filewrite(snpin,outPath):
                     fout.write("%s:" % BE)
                     grna_l = re_extract(dic[snp][BE])
                     for grna in grna_l:
-                        hive = hive_score(BE, snp, grna)
-                    #@ print('grna_l:', grna_l)
+                        hive = hive_score(BE, seq5,seq3,mut, grna)
+                    #print('grna_l:', grna_l)
                         fout.write("%s efficiency: %s " % (grna, hive))
                 fout.write("\t")
             fout.write("\n")
 
 
-def BEsingle_50mer(jobid,seq5,seq3,wt,mut,readingframe,outPath):
+def BEsingle_100nt(jobid,seq5,seq3,wt,mut,readingframe,outPath):
     snpin = snp_define(jobid, seq5, seq3, wt, mut, readingframe)
-    filewrite(snpin, outPath)
+    filewrite(snpin, outPath,seq5,seq3,mut)
 
 def BEsingle_rsID(rsID,outPath):
     allsnps=get_rsIDsnp(rsID,outPath)
     try:
         for snp in allsnps:
             jobid='rs'+str(snp['formal_id'])
-            seq5=snp['genomic_flanking'][0:25]
-            seq3=snp['genomic_flanking'][26:]
+            seq5=snp['genomic_flanking'][0:50]
+            seq3=snp['genomic_flanking'][51:]
             readingframe=int(snp['reading_frame'])
             if re.match(r'(\S{1})>(\S{1})',snp['SNP']):
                 m=re.match(r'(\S{1})>(\S{1})',snp['SNP'])
@@ -510,19 +517,18 @@ def BEsingle_rsID(rsID,outPath):
                 mut=m.group(2)
             if wt and mut:
                 snpin = snp_define(jobid, seq5, seq3, wt, mut, readingframe)
-                filewrite(snpin, outPath)
+                filewrite(snpin, outPath,seq5,seq3,mut)
 
     except:
         print("Can't search SNV information of rsID:{0}".format(rsID))
 
 
 
-
-
 """
-[{'formal_id': '28937596', 'ClinicalSignificance': 'pathogenic', 'GENE_ID': '8893', 'chromosome': '3',
-  'coordinate': 184144111, 'fxnClass': 'missense_variant,coding_sequence_variant,non_coding_transcript_variant',
-  'genomic_flanking': 'CTTTCTTCCATAGCTGCTAAAGGCCTGGAGCCCTGTTTTTAGGAACTACAT', '5UTR': False, '3UTR': False,
-  'original_codon': 'TGG', 'reading_frame': 1, 'orientation': '+', 'SNP': 'T>C',
-  'CDS_flanking': Seq('CCTGCTGCTTCCTCTGCTAAAGGCCTGGAGCCCTGTTTTTAGGAACTACATA')}]
+jobid, seq5, seq3, wt, mut, readingframe="rs80357410","GCGTTGAAGAAGTACAAAATGTCATTAATGCTATGCAGAAAATCTTAGAG",\
+                                         "GTCCCATCTGGTAAGTCAGCACAAGAGTGTATTAATTTGGGATTCCTATG","T","C",1
+
+outPath=""
+snpin = snp_define(jobid, seq5, seq3, wt, mut, readingframe)
+filewrite(snpin, outPath,seq5,seq3, mut)
 """
