@@ -76,10 +76,10 @@ def main_cmd(args):
     now = datetime.now()
     if args.command == "designsgRNA_opt1":
         print("{0:40}{1:>20}".format("Design primer start!", ctime()))
-        BEsingle_100nt(args.jobID,args.upSeq,args.downSeq,args.mut,args.wt,args.codon_frame,args.o) #.............
+        BEsingle_100nt(args.jobID,args.upSeq,args.downSeq,args.mut,args.wt,args.codon_frame,args.o) #
     if args.command == "designsgRNA_opt2":
         print("{0:40}{1:>20}".format("Design primer start!", ctime()))
-        BEsingle_rsID(args.rsID,args.o) #............
+        BEsingle_rsID(args.rsID,args.o) #
     if args.command == "OTprediction":
         print("{0:40}{1:>20}".format("Predict OT profile start!", ctime()))
         OT_predict(args.BE,args.grna,args.onpam,args.genome,args.mis,args.DNAbulge,args.RNAbulge,args.o)
