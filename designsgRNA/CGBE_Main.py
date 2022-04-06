@@ -1,9 +1,6 @@
-from BE_dot_02.dot_baseEditorsTable import CBElist,  ABElist, CGBElist, BEletter
-from BE_dot_02.snpClass import snp_define,supo_snp_define
-from BE_dot_02.dot_fetchrsID import get_rsIDsnp
-#from BE_dot.dot_BEsingle_presyn12 import precise_syn12_correct
-#from BE_dot.dot_BEsinglesyn3 import syn3_correct
-# function name changed to: precise_correct(snp) synonymous3(snp)
+from designsgRNA.baseEditorsTable import CBElist,  ABElist,CGBElist, BEletter
+from designsgRNA.snpClass import snp_define,supo_snp_define
+from designsgRNA.fetchrsID import get_rsIDsnp
 
 from Bio.Seq import Seq
 import csv
@@ -55,36 +52,35 @@ def synonymous12(snp,rc_flag,under_editing_cor,BElist,BE):
         under_editing_seq=snp.seq5[under_editing_cor[0]:]+snp.mut+snp.seq3[:under_editing_cor[1]]
     else:
         under_editing_seq=snp.mut+snp.seq3[:under_editing_cor[1]]
-    after_editing_seq=None;after_full_seq=None #####!!!!!!!!!!!!!!!!
+    after_editing_seq=None;after_full_seq=None 
     if BElist[BE][3]=='C':
         after_editing_seq=under_editing_seq.replace('C','G')
-        #@  print("after_editing_seq:\t", after_editing_seq)
+        #print("after_editing_seq:\t", after_editing_seq)
     ### ref_full_seq, after_full_seq:
     ref_full_seq12=snp.seq5+snp.wt+snp.seq3## under_full_seq=snp.seq5+snp.mut+snp.seq3
     if under_editing_cor[0] != 0 and after_editing_seq:
-        after_full_seq=snp.seq5[:under_editing_cor[0]]+after_editing_seq+snp.seq3[under_editing_cor[1]:] ## .....
+        after_full_seq=snp.seq5[:under_editing_cor[0]]+after_editing_seq+snp.seq3[under_editing_cor[1]:] 
     elif under_editing_cor[0] == 0 and after_editing_seq:
         after_full_seq =snp.seq5+after_editing_seq+snp.seq3[under_editing_cor[1]:]
 
-    if after_full_seq: #### !!!!! 容易写错为if not after_full_seq
-        #print(type(after_full_seq))
+    if after_full_seq: 
         if rc_flag==False:
-            aa_ref_full_seq=Seq(ref_full_seq12).translate()## not!!!  aa_under_full_seq
+            aa_ref_full_seq=Seq(ref_full_seq12).translate()
             aa_after_full_seq=Seq(after_full_seq).translate()
         else: ### if rc_flag==True
-            aa_ref_full_seq = Seq(ref_full_seq12).reverse_complement().translate()  ## not!!!  aa_under_full_seq
+            aa_ref_full_seq = Seq(ref_full_seq12).reverse_complement().translate()  
             aa_after_full_seq = Seq(after_full_seq).reverse_complement().translate()
 
         if aa_ref_full_seq==aa_after_full_seq:
             synonymous12_flag=True
-        #@  print("ref_full_seq\t",ref_full_seq12,"\nlen(ref_full_seq)\t",len(ref_full_seq12))
-        #@  print("after_full_seq\t", after_full_seq, "\nlen(after_full_seq)\t", len(after_full_seq))
-        #@  print('synonymous12_flag:',synonymous12_flag)
+        #print("ref_full_seq\t",ref_full_seq12,"\nlen(ref_full_seq)\t",len(ref_full_seq12))
+        #print("after_full_seq\t", after_full_seq, "\nlen(after_full_seq)\t", len(after_full_seq))
+        #print('synonymous12_flag:',synonymous12_flag)
 
     return synonymous12_flag
 def precise_syn12_correct(snp):
-    snp = cut_3nlen(snp) ## !!!!!!! prepare for synonymous12
-    #@  print(snp)
+    snp = cut_3nlen(snp) 
+    #print(snp)
     ### ABE or CBE:
     rc_flag=False
     if snp.mut == "G":
@@ -102,11 +98,11 @@ def precise_syn12_correct(snp):
     #######################################
     ### precise correction or synonymous12
     precise_snp_be_grna = {};synonymous12_snp_be_grna = {}
-    precise_snp_be_grna[snp.jobid] = {};synonymous12_snp_be_grna[snp.jobid] = {}  ####  wzl_note  !!!!!!!! 不加此命名，KeyError: 'rs80357410'
+    precise_snp_be_grna[snp.jobid] = {};synonymous12_snp_be_grna[snp.jobid] = {} 
     precise_be_grna = {};synonymous12_be_grna = {}
     if BElist:
         for BE in BElist:  ## eg of BE: "BE4(max)": ["NGG",13,17,"C","T","U"]
-            #@  print("BE:\n", BE)
+            #print("BE:\n", BE)
             precise_be_grna[BE]=[];synonymous12_be_grna[BE] = []
             if BElist[BE][5] == "U":
                 act_wind_range = BElist[BE][2] - BElist[BE][1] + 1
@@ -135,7 +131,7 @@ def precise_syn12_correct(snp):
                     ### if pam match:
                     pamFlag = False
                     base_count = 0
-                    if len(pam_seq) == pam_len:  ###!!!!!!!!
+                    if len(pam_seq) == pam_len:  
                         for j in range(pam_len):
                             if pam_seq[j] in BEletter[BEpam[j]]:
                                 base_count += 1
@@ -152,7 +148,7 @@ def precise_syn12_correct(snp):
                         # print(under_editing_seq)
 
                     if len(under_editing_seq.replace(BElist[BE][3], '')) + 1 < len(under_editing_seq) or snp.wt != \
-                            BElist[BE][4] : #!!!!!!!!!!!!!!!! synonynous case1 or case2
+                            BElist[BE][4] : 
                         ## synonymous case 1 ,case2
                         #@  print("try synonymous12\n")
                         synonymous12Flag = synonymous12(snp,rc_flag, under_editing_cor, BElist,BE)
@@ -236,7 +232,7 @@ def match_pam_wind(snp,base2edit,BElist):
                 ## if pam match
                 pamFlag = False
                 base_count = 0
-                if len(pam_seq) == pam_len: ###!!!!!!!!
+                if len(pam_seq) == pam_len: 
                     #print("pam_seq:", pam_seq, "\npam_len:", pam_len)
                     for j in range(pam_len):
                         if pam_seq[j] in BEletter[BEpam[j]]:
@@ -248,11 +244,11 @@ def match_pam_wind(snp,base2edit,BElist):
                 ## if base2edit in wind
                 baseFlag=False
                 #print("type of under_editing_seq",type(under_editing_seq))
-                if len(under_editing_seq.replace(base2edit,''))<len(under_editing_seq):  ## can't use re module, type(under_editing_seq): <class 'Bio.Seq.Seq'>
+                if len(under_editing_seq.replace(base2edit,''))<len(under_editing_seq): 
                     baseFlag=True
                 if (pamFlag==True and baseFlag==True):
                     matchFlag = True
-                if matchFlag and grna_seq and pam_seq: ### !!!!!!!!!!!!!!!!!
+                if matchFlag and grna_seq and pam_seq: 
                     BE_windCorGrnaPam_d[BE].append([under_editing_cor,grna_seq,pam_seq])### under_editing_cor is a []
                     ### eg: for i in dta['be3']: print(i)   >>> [[1, 4], 'AAACCCCCC', 'TGG']
     return BE_windCorGrnaPam_d
@@ -294,13 +290,13 @@ def syn3_correct(snp):
     ######  {} synonymous3_snp_be_grna   #########
     synonymous3_snp_be_grna = {}
     synonymous3_be_grna = {}
-    synonymous3_snp_be_grna[snp.jobid] = {}  ####  wzl_note  !!!!!! 不加此命名，KeyError
+    synonymous3_snp_be_grna[snp.jobid] = {} 
     try:
         for i in [0,1]:
-            supo_snp,ref_full_seq=suposnp_reffullseq_cut_3nlen(snp,supo_snp_l[i],ref_full_seq_l[i]) ##### !!!!!!!!!
+            supo_snp,ref_full_seq=suposnp_reffullseq_cut_3nlen(snp,supo_snp_l[i],ref_full_seq_l[i]) 
             #print("i of supo_snp,ref_full_seq:",i,"\n***",supo_snp,"\n***",ref_full_seq)
             ###### BElist=ABE or CBE; if rc_flag: rc-supo_snp, rc-ref_full_seq
-            rc_flag=False ### !!!!!!!!!!!!!!!!!!!!!!
+            rc_flag=False 
             if supo_snp.wt=='C':
                 BElist=CGBElist
             elif supo_snp.wt=='G':
@@ -309,12 +305,12 @@ def syn3_correct(snp):
                 rc_snp_seq3 = Seq(supo_snp.seq5).reverse_complement()
                 rc_snp_wt = "C"
                 supo_snp = supo_snp_define(supo_snp.jobid, rc_snp_seq5, rc_snp_seq3, rc_snp_wt, supo_snp.readingframe)
-                ref_full_seq=Seq(ref_full_seq).reverse_complement() ### !!!!!!!!!!!!!!!!!!!!!
+                ref_full_seq=Seq(ref_full_seq).reverse_complement() 
                 rc_flag=True
 
             else:
                 BElist=None
-            if i==0 and BElist!=None:### !!!!!!!!!!!!!!!!!!!! to give an initila-value & inherit i==0 when i==1
+            if i==0 and BElist!=None:
                 for BE in BElist:
                     synonymous3_be_grna[BE]=[]
             elif i == 1 and BElist != None: ## if i==1
@@ -330,13 +326,12 @@ def syn3_correct(snp):
             ######################################################
             ## match_pam_wind(): in: snp, base2edit, BElist :
             BE_windCorGrnaPam_d=match_pam_wind(supo_snp, supo_snp.wt, BElist)
-            #@  print("BE_windCorGrnaPam_d:\t",BE_windCorGrnaPam_d)
+            #print("BE_windCorGrnaPam_d:\t",BE_windCorGrnaPam_d)
 
             for BE in BE_windCorGrnaPam_d.keys():
-                #synonymous3_be_grna[BE]=[] ^
                 #@  print("BE:\n", BE)
-                for windCorGrnaPam_l in BE_windCorGrnaPam_d[BE]: ### windCorGrnaPam_l is a list:[[cor_down,cor_up],grna,pam]
-                    under_editing_cor= windCorGrnaPam_l[0] ### under_editing_cor is a list:[cor_down,cor_up]
+                for windCorGrnaPam_l in BE_windCorGrnaPam_d[BE]: 
+                    under_editing_cor= windCorGrnaPam_l[0] 
                     synonymous3_flag=False
                     ### under_editing_seq, after_editing_seq;  ref_full_seq, after_full_seq:
                     if under_editing_cor[0] != 0:
@@ -344,24 +339,24 @@ def syn3_correct(snp):
                     else:
                         under_editing_seq = supo_snp.wt + supo_snp.seq3[:under_editing_cor[1]]
 
-                    after_editing_seq = None;after_full_seq = None  #####!!!!!!!!!!!!!!!!
+                    after_editing_seq = None;after_full_seq = None  
                     if BElist[BE][3] == 'C':
                         after_editing_seq = under_editing_seq.replace('C', 'G')
                         #print("after_editing_seq:\t", after_editing_seq)
 
                     ### ref_full_seq, after_full_seq:
                     if under_editing_cor[0] != 0 and after_editing_seq:
-                        after_full_seq = supo_snp.seq5[:under_editing_cor[0]] + after_editing_seq + supo_snp.seq3[under_editing_cor[1]:]  ## .....
+                        after_full_seq = supo_snp.seq5[:under_editing_cor[0]] + after_editing_seq + supo_snp.seq3[under_editing_cor[1]:]  
                     elif under_editing_cor[0] == 0 and after_editing_seq:
                         after_full_seq = supo_snp.seq5 + after_editing_seq + supo_snp.seq3[under_editing_cor[1]:]
 
-                    if after_full_seq:  #### !!!!! 容易写错为if not after_full_seq
+                    if after_full_seq:  
                         #@  print("ref_full_seq:\t",ref_full_seq,"\nafter_full_seq:\t",after_full_seq)
                         if rc_flag==False:
                             aa_ref_full_seq = Seq(ref_full_seq).translate()  ## aa_ref_full_seq, not  aa_under
                             aa_after_full_seq = Seq(after_full_seq).translate()
                         else:  ##ie rc_flag==True
-                            aa_ref_full_seq = Seq(ref_full_seq).reverse_complement().translate()  ## aa_ref_full_seq, not  aa_under
+                            aa_ref_full_seq = Seq(ref_full_seq).reverse_complement().translate()  
                             aa_after_full_seq = Seq(after_full_seq).reverse_complement().translate()
                         if aa_ref_full_seq == aa_after_full_seq:
                             synonymous3_flag = True
@@ -431,13 +426,13 @@ def filewrite(snpfile,outPath):
         #@ print("********* synonymous123:\n",synonymous123)
         #@ print("********* allmatch:\n", allmatch)
         ################  writeout  ##################
-    with open("{0}/cleanMatches_file.txt".format(outPath), mode='w') as fout: # r'D:\00_project\predict\BE_dot\results\{0}_cleanMatches_file.txt'
+    with open("{0}/cleanMatches_file.txt".format(outPath), mode='w') as fout: 
         fout.write("snp\tprecise_BE-grna\n")
         #@  print("********precise*******",precise)
         dic=copy.deepcopy(precise) #!!!!!!!!!!
         #@  print("********dic of precise*******", dic)
         for snp in dic:
-            if dic[snp]!={}: #@ add
+            if dic[snp]!={}: 
                 fout.write("%s\t" % snp)
                 for BE in dic[snp]:
                     if dic[snp][BE] != []:
@@ -447,7 +442,7 @@ def filewrite(snpfile,outPath):
                     fout.write("\t")
                 fout.write("\n")
 
-    with open("{0}/quietMatches_file.txt".format(outPath), mode='w') as fout: # r'D:\00_project\predict\BE_dot\results\{0}_quietMatches_file.txt
+    with open("{0}/quietMatches_file.txt".format(outPath), mode='w') as fout: 
         fout.write("snp\tsynonymous_BE-grna\n")
         dic=copy.deepcopy(synonymous123)
         for snp in dic:
@@ -462,14 +457,7 @@ def filewrite(snpfile,outPath):
                 fout.write("\n")
 
 if __name__=='__main__':
-    snpin=r'D:\00_project\predict\BEFF\snps_with_clinvar2.csv' ## r'D:\00_project\predict\BE_dot_02\wzltest_snps_with_clinvar2.csv'
-    outPath = r"D:\00_project\predict\BE_dot_02\results"
+    snpin=r'snps_with_clinvar2.csv'
+    outPath = r"\results\"
     filewrite(snpin,outPath)
 
-"""
-[{'formal_id': '28937596', 'ClinicalSignificance': 'pathogenic', 'GENE_ID': '8893', 'chromosome': '3',
-  'coordinate': 184144111, 'fxnClass': 'missense_variant,coding_sequence_variant,non_coding_transcript_variant',
-  'genomic_flanking': 'CTTTCTTCCATAGCTGCTAAAGGCCTGGAGCCCTGTTTTTAGGAACTACAT', '5UTR': False, '3UTR': False,
-  'original_codon': 'TGG', 'reading_frame': 1, 'orientation': '+', 'SNP': 'T>C',
-  'CDS_flanking': Seq('CCTGCTGCTTCCTCTGCTAAAGGCCTGGAGCCCTGTTTTTAGGAACTACATA')}]
-"""
