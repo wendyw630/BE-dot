@@ -1,3 +1,7 @@
+### Statement
+all the files in this folder are referenced from 
+"Zhang C, Wang D, Qi T, et al. BEdeepoff: an in silico tool for off-target prediction of ABE and CBE base editors. bioRxiv, 2021"
+
 ### System requirements
 The code were tesed on Linux and Mac OS systems.
 
