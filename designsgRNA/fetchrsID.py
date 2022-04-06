@@ -6,7 +6,7 @@ from xml.dom.minidom import parseString
 import urllib.request
 import os, re
 
-# from Bio.Alphabet import generic_dna  ### wzl_del
+# from Bio.Alphabet import generic_dna 
 
 def download_file(url, filename):
 	# print >> sys.stderr, "filename:" + filename
@@ -21,7 +21,7 @@ def get_xml_filename(genome, chrom, startpos, endpos, cache_dir):
 
 
 def get_dna_coordinates_xmlfile(genome, chromosome, startpos, endpos, cache_dir):
-	url = "http://genome.ucsc.edu/cgi-bin/das/{0}/dna?segment={1}:{2},{3}" ### wzl_note: genome.ucsc.edu !!!!!!!
+	url = "http://genome.ucsc.edu/cgi-bin/das/{0}/dna?segment={1}:{2},{3}" 
 
 	# chr15:65637530,65637553"
 	current_filename = get_xml_filename(genome, chromosome, startpos, endpos, cache_dir)
@@ -39,7 +39,7 @@ def get_dna_coordinates_xmlfile(genome, chromosome, startpos, endpos, cache_dir)
 	download_file(current_url, current_filename)
 	return current_filename
 
-### wzl_note: the main func():
+### the main func():
 ## input: genome, chrom, startpos, endpos
 ## output: DNA-seq
 def fetch_dna_coordinates(genome, chrom, startpos, endpos, cache_dir):
@@ -49,7 +49,6 @@ def fetch_dna_coordinates(genome, chrom, startpos, endpos, cache_dir):
 	seq = re.sub("\s", "", xmldata.childNodes[1].childNodes[1].childNodes[1].childNodes[0].data.upper())
 	return seq
 
-### wzl_del:
 '''
 def get_seq_by_orientation(seq, strand):
 	"""
@@ -66,9 +65,8 @@ def get_seq_by_orientation(seq, strand):
 ######################  single_rsid  ########################
 import copy
 from Bio import Entrez, SeqIO
-#@  from Scripts.fetch_genomic_seq import *
 
-#######  wzl_note:  Entrez.efetch()
+#######   Entrez.efetch()
 def get_rsIDsnp(snp_id, temp_dir):
 	"""
 	This function takes as input a snp identifiers and a temporary directory to save temp files to
@@ -77,7 +75,7 @@ def get_rsIDsnp(snp_id, temp_dir):
 	Entrez.email = 'A.N.Other@example.com'
 
 	try:
-		handle = Entrez.efetch(db='SNP', id=snp_id)  ### wzl_note: db !!!!!!!!!!
+		handle = Entrez.efetch(db='SNP', id=snp_id)  
 		snp_info = handle.read()
 		handle.close()
 	except:
@@ -118,7 +116,7 @@ def get_rsIDsnp(snp_id, temp_dir):
 	## For example, A,NM_001316352.1:c.343C&gt means that there was an SNV to A at position 343 of the mRNA
 
 	m = re.finditer("([ACGT]),(NM_.*?):c\.([0-9\-]+)", r["DOCSUM"])
-	orig_nuc = re.search("SEQ\=\[([ACGT])", r["DOCSUM"]).group(1)  ### wzl_note: ref_nuc
+	orig_nuc = re.search("SEQ\=\[([ACGT])", r["DOCSUM"]).group(1)  
 	mutations = {}
 	for match in m:
 		try:
@@ -135,7 +133,7 @@ def get_rsIDsnp(snp_id, temp_dir):
 	all_snps = []
 	for k, v in mutations.items():
 		try:
-			handle = Entrez.efetch(db='nucleotide', id=",".join(v), rettype="gb", retmode="text")  ### wzl_note: db !!!!!!!!!!,
+			handle = Entrez.efetch(db='nucleotide', id=",".join(v), rettype="gb", retmode="text")  
 			# "gb": a seq format, like fasta
 			response_item = SeqIO.parse(handle, "gb").__next__() #only need one
 			for feature in response_item.features:
@@ -151,7 +149,7 @@ def get_rsIDsnp(snp_id, temp_dir):
 			all_snps[-1]["5UTR"] = k[1] < 0
 			all_snps[-1]["3UTR"] = k[1] > (cds_end_index - cds_start_index)
 
-			if not (all_snps[-1]["5UTR"] or all_snps[-1]["3UTR"]): ### wzl_note: not(False or False)
+			if not (all_snps[-1]["5UTR"] or all_snps[-1]["3UTR"]): 
 				orig_codon = mrna[(snp_idx // 3) * 3:(snp_idx // 3 + 1) * 3]
 				all_snps[-1]["original_codon"] = str(orig_codon)
 				all_snps[-1]["reading_frame"] = snp_idx % 3 + 1
@@ -198,8 +196,3 @@ ariant,genic_downstream_transcript_variant,missense_variant', 'genomic_flanking'
 ant,genic_downstream_transcript_variant,missense_variant', 'genomic_flanking': 'CTGGTGATGACCGTGGGCCTTCTGGCGGTGGTCGTCTACCTGTACACCGTG', '5UTR': False, '3UTR': False, 'o
 riginal_codon': 'GCG', 'reading_frame': 2, 'orientation': '+', 'SNP': 'C>G', 'CDS_flanking': Seq('CTGGTGATGACCGTGGGCCTTCTGGCGGTGGTCGTCTACCTGTACACCGTGG')}]
 """
-# genomic_flanking:  CDS_flanking去掉了SNV， 只有50bp
-
-
-
-
