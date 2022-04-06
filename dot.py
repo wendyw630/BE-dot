@@ -1,20 +1,21 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 ######### author: wangzelu ###########
 ######################################
 from time import ctime
 import argparse
-#from utils.sgrnaDesign import BEsingle_50mer
-#from utils.sgrnaDesign import BEsingle_rsID
-from BE_dot_02.dot_baseEditorsTable import CBElist,ABElist,CGBElist
-#from utils.otPredict import OT_predict
-#from utils.otAnno import OT_anno
+
+from designsgRNA.utils import BEsingle_100nt
+from designsgRNA.utils import BEsingle_rsID
+from designsgRNA.baseEditorsTable import CBElist,ABElist,CGBElist
+from OTprediction.utils import OT_predict
+from OTannotation.utils import OT_anno
 def init():
     desc = """Program: BE-dot
               Version: 1.0
               Author: Zelu Wang
               Email: wangzl630@163.com
     	"""
-    usage = "%(prog)s"  ## prog: a builtin var. of argparse
+    usage = "%(prog)s"
     parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter, description=desc,
                                      usage=usage)
 
@@ -75,7 +76,7 @@ def main_cmd(args):
     now = datetime.now()
     if args.command == "designsgRNA_opt1":
         print("{0:40}{1:>20}".format("Design primer start!", ctime()))
-        BEsingle_50mer(args.jobID,args.upSeq,args.downSeq,args.mut,args.wt,args.codon_frame,args.o) #.............
+        BEsingle_100nt(args.jobID,args.upSeq,args.downSeq,args.mut,args.wt,args.codon_frame,args.o) #.............
     if args.command == "designsgRNA_opt2":
         print("{0:40}{1:>20}".format("Design primer start!", ctime()))
         BEsingle_rsID(args.rsID,args.o) #............
@@ -87,10 +88,10 @@ def main_cmd(args):
         OT_anno(args.BE,args.i,args.o)
 
 if __name__ == "__main__":
-	parser = init()
-	args = parser.parse_args()
+    parser = init()
+    args = parser.parse_args()
 
-	if args.command not in ("designsgRNA_opt1","designsgRNA_opt2","formatdb","searchdb"):
-		parser.print_help()
-	else:
-		main_cmd(args)
+    if args.command not in ("designsgRNA_opt1","designsgRNA_opt2","formatdb","searchdb"):
+        parser.print_help()
+    else:
+        main_cmd(args)
