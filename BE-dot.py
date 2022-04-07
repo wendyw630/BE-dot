@@ -73,13 +73,13 @@ def init():
 
 def main_cmd(args):
     if args.command == "designsgRNA_opt1":
-        BEsingle_100nt(args.jobID,args.upSeq,args.downSeq,args.mut,args.wt,args.codon_frame,args.o) #
+        BEsingle_100nt(args.jobID,args.upSeq,args.downSeq,args.mut,args.wt,args.codon_frame,args.outputPath) #
     if args.command == "designsgRNA_opt2":
         BEsingle_rsID(args.rsID,args.o) #
     if args.command == "OTprediction":
-        OT_predict(args.BE,args.grna,args.genome,args.mis,args.DNAbulge,args.RNAbulge,args.o)
+        OT_predict(args.BE,args.grna,args.genome,args.mis,args.DNAbulge,args.RNAbulge,args.outputPath)
     if args.command == "OTannotation":
-        OT_anno(args.BE,args.i,args.o)
+        OT_anno(args.BE,args.i,args.outputPath)
 
 if __name__ == "__main__":
     parser = init()
