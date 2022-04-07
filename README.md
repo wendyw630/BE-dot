@@ -77,7 +77,6 @@ optional arguments:
   -h, --help            show this help message and exit
   -BE BE                BE to do OT-prediction
   -grna GRNA            Single gRNA sequence to analyse (20nt)
-  -onpam ONPAM          pam of on-target site
   -genome <file>, --target_genome <file>
                         Genome to search off-target sites
   -mis MISMATCH_NUMBER, --mismatch_number MISMATCH_NUMBER
@@ -106,3 +105,22 @@ optional arguments:
                         Path of output file(s)
 
 ```
+## Example
+### designsgRNA_opt1:
+```
+python BE-dot.py designsgRNA_opt1 --jobID job001 --upSeq GCGTTGAAGAAGTACAAAATGTCATTAATGCTATGCAGAAAATCTTAGAG
+--downSeq GTCCCATCTGGTAAGTCAGCACAAGAGTGTATTAATTTGGGATTCCTATG --mut C --wt T --codon_frame 1 --outputPath /usr/local/data/
+```
+### designsgRNA_opt2:
+```
+python BE-dot.py designsgRNA_opt2 --rsID rs80357410 --outputPath /path/data/
+```
+### OTprediction
+```
+python BE-dot.py OTprediction -BE BE-PLUS -grna AAATCTTAGAGCGTCCCATC -genome /usr/local/database/GRCh38.fa -o /usr/local/data/
+```
+### OTannotation
+```
+python BE-dot.py OTannotation -BE BE-PLUS -i /usr/local/data/BE-PLUS_AAAT.txt -o /usr/local/data/
+```
+
