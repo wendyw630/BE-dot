@@ -101,8 +101,8 @@ optional arguments:
                         BE to do OT-annotation
   -i INPUT_FILE, --input-file INPUT_FILE
                         Set input tsv file
-  -o OUTPUTPATH, --outputPath OUTPUTPATH
-                        Path of output file(s)
+  -o OUTPUTFILE, --outputFile OUTPUTFILE
+                       
 
 ```
 ## Example
@@ -121,6 +121,6 @@ python BE-dot.py OTprediction -BE BE-PLUS -grna AAATCTTAGAGCGTCCCATC -genome /us
 ```
 ### OTannotation
 ```
-python BE-dot.py OTannotation -BE BE-PLUS -i /usr/local/data/BE-PLUS_AAAT.txt -o /usr/local/data/
+python BE-dot.py OTannotation -BE BE-PLUS -i /usr/local/data/BE-PLUS_AAAT.txt -o /usr/local/data/BE-PLUS_AAAT.avinput
 ```
 
