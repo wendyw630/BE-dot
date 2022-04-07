@@ -112,7 +112,7 @@ python BE-dot.py designsgRNA_opt1 --jobID rs80357410 --upSeq GCGTTGAAGAAGTACAAAA
 ```
 ### designsgRNA_opt2:
 ```
-python BE-dot.py designsgRNA_opt2 --rsID rs80357410 --outputPath /path/data/
+python BE-dot.py designsgRNA_opt2 --rsID rs80357410 --outputPath /usr/local/data/
 ```
 ### OTprediction
 ```
