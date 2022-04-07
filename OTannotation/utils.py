@@ -6,10 +6,11 @@
 from designsgRNA.baseEditorsTable import CBElist,  ABElist
 import os
 import sys
-import pandas as pd
-from Bio.Seq import Seq
 import itertools
 import re
+import pandas as pd
+from Bio.Seq import Seq
+from pathlib import Path
 
 def OT_anno(be,infile,outfile):
     if be in CBElist:
@@ -94,8 +95,12 @@ def OT_anno(be,infile,outfile):
                     fout.write(outchromosome + "\t" + str(inpos1) + "\t" + str(inpos2) + "\t" +
                                ref_frag + "\t" + alt_frag + "\t" + rev_comp_OT+ "," + "minus"+str(C_apos_comb) + "\n")
             #if row['#Bulge type']=='RNA':
-
         fout.close()
+        ###############################################
+        ##############  run ANNOVAR  ##############
+        anno_infile = Path(outfile)
+        sample_name=str(anno_infile.stem)
+        os.system("./OTannotation/run_ANNOVAR.sh {0}".format(sample_name))
     except Exception as e:
         print(str(e))
 
