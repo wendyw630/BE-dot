@@ -13,15 +13,15 @@ from OTprediction.CFD.CFD import calcCfdScore
 # grnaNNN 3
 ## output:
 def cas_offinder_input(be, grna, genome, mis, DNAbulge, RNAbulge):
+    global pam
+    global sample_name
     pam = None
     if be in CBElist:
         pam = CBElist[be][0]
     if be in ABElist:
         pam = ABElist[be][0]
     if pam:
-        global pam
         sample_name = str(be) + grna[:4]
-        global sample_name
         f = open("/root/project/data/cas_in_{0}.txt".format(sample_name), 'w')
         f.write(genome + '\n')
         f.write('NNNNNNNNNNNNNNNNNNNN' + str(pam).upper() + "\t" + str(DNAbulge) + "\t" + str(RNAbulge) + "\n")
