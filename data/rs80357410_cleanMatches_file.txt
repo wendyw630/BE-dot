@@ -1,0 +1,2 @@
+snp	precise_BE-grna
+rs80357410	Target-AID-NG:AGCGTCCCATCTGGTAAGTCag efficiency: unknown 	xBE3:TTAGAGCGTCCCATCTGGTAag efficiency: unknown 	SpRY-BE4max:TCTTAGAGCGTCCCATCTGGtaa efficiency: unknown CTTAGAGCGTCCCATCTGGTaag efficiency: unknown TTAGAGCGTCCCATCTGGTAagt efficiency: unknown 	SpRY-PmCDA1:GAGCGTCCCATCTGGTAAGTcag efficiency: unknown 	
