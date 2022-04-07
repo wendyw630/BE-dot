@@ -52,7 +52,7 @@ def init():
     OTparser= subparser.add_parser("OTprediction",help="predict off-target profile")
     OTparser.add_argument('-BE',choices=BElist,required=True,help="BE to do OT-prediction")
     OTparser.add_argument('-grna',required=True,help="Single gRNA sequence to analyse (20nt)")
-    OTparser.add_argument('-onpam', required=True, help="pam of on-target site")
+    #OTparser.add_argument('-onpam', required=True, help="pam of on-target site")
     OTparser.add_argument('-genome',"--target_genome", metavar="<file>", type=str,
                         help="Genome to search off-target sites",
                         default="Homo_sapiens.GRCh38.dna_sm.primary_assembly.fa")
@@ -82,7 +82,7 @@ def main_cmd(args):
         BEsingle_rsID(args.rsID,args.o) #
     if args.command == "OTprediction":
         print("{0:40}{1:>20}".format("Predict OT profile start!", ctime()))
-        OT_predict(args.BE,args.grna,args.onpam,args.genome,args.mis,args.DNAbulge,args.RNAbulge,args.o)
+        OT_predict(args.BE,args.grna,args.genome,args.mis,args.DNAbulge,args.RNAbulge,args.o)
     if args.command == "OTannotation":
         print("{0:40}{1:>20}".format("Annotate OT product start!", ctime()))
         OT_anno(args.BE,args.i,args.o)
