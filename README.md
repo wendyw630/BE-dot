@@ -108,8 +108,7 @@ optional arguments:
 ## Example
 ### designsgRNA_opt1:
 ```
-python BE-dot.py designsgRNA_opt1 --jobID job001 --upSeq GCGTTGAAGAAGTACAAAATGTCATTAATGCTATGCAGAAAATCTTAGAG
---downSeq GTCCCATCTGGTAAGTCAGCACAAGAGTGTATTAATTTGGGATTCCTATG --mut C --wt T --codon_frame 1 --outputPath /usr/local/data/
+python BE-dot.py designsgRNA_opt1 --jobID rs80357410 --upSeq GCGTTGAAGAAGTACAAAATGTCATTAATGCTATGCAGAAAATCTTAGAG --downSeq GTCCCATCTGGTAAGTCAGCACAAGAGTGTATTAATTTGGGATTCCTATG --mut C --wt T --codon_frame 1 --outputPath /usr/local/data/
 ```
 ### designsgRNA_opt2:
 ```
