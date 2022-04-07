@@ -1,7 +1,6 @@
 #!/usr/bin/python
 ######### author: wangzelu ###########
 ######################################
-from time import ctime
 import argparse
 
 from designsgRNA.utils import BEsingle_100nt
@@ -73,18 +72,13 @@ def init():
     return parser
 
 def main_cmd(args):
-    now = datetime.now()
     if args.command == "designsgRNA_opt1":
-        print("{0:40}{1:>20}".format("Design primer start!", ctime()))
         BEsingle_100nt(args.jobID,args.upSeq,args.downSeq,args.mut,args.wt,args.codon_frame,args.o) #
     if args.command == "designsgRNA_opt2":
-        print("{0:40}{1:>20}".format("Design primer start!", ctime()))
         BEsingle_rsID(args.rsID,args.o) #
     if args.command == "OTprediction":
-        print("{0:40}{1:>20}".format("Predict OT profile start!", ctime()))
         OT_predict(args.BE,args.grna,args.genome,args.mis,args.DNAbulge,args.RNAbulge,args.o)
     if args.command == "OTannotation":
-        print("{0:40}{1:>20}".format("Annotate OT product start!", ctime()))
         OT_anno(args.BE,args.i,args.o)
 
 if __name__ == "__main__":
