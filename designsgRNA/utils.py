@@ -433,7 +433,7 @@ def re_extract(dic_snp_be):
     pattern=re.compile(r'\'([AGCTagct]{20,})\'')
     result=pattern.findall(target_str)
     return result
-def filewrite(snpin,outPath,seq5,seq3, mut):
+def filewrite(snpin,jobid,outPath,seq5,seq3, mut):
     precise = {};synonymous12 = {}
     synonymous3 = {}
     synonymous123={}
@@ -501,7 +501,7 @@ def filewrite(snpin,outPath,seq5,seq3, mut):
 
 def BEsingle_100nt(jobid,seq5,seq3,wt,mut,readingframe,outPath):
     snpin = snp_define(jobid, seq5, seq3, wt, mut, readingframe)
-    filewrite(snpin, outPath,seq5,seq3,mut)
+    filewrite(snpin, jobid,outPath,seq5,seq3,mut)
 
 def BEsingle_rsID(rsID,outPath):
     allsnps=get_rsIDsnp(rsID,outPath)
@@ -517,7 +517,7 @@ def BEsingle_rsID(rsID,outPath):
                 mut=m.group(2)
             if wt and mut:
                 snpin = snp_define(jobid, seq5, seq3, wt, mut, readingframe)
-                filewrite(snpin, outPath,seq5,seq3,mut)
+                filewrite(snpin, jobid, outPath,seq5,seq3,mut)
 
     except:
         print("Can't search SNV information of rsID:{0}".format(rsID))
