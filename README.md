@@ -5,12 +5,12 @@ BE-dot takes a given SNV as input, containing funtions about designing sgRNAs, p
 Besides providing precise correction schemes at DNA level,BE-dot can perform synonymous corrections at protein level by degeneracy. 
 When predicting off-target profiles of single base editing systems, BE-dot integrates multiple tools such as Cas-OFFinder, CALITAS, CFD, CRISTA and uCRISPR. In addition, BE-dot can automatically analyze all possible editing products at off-target sites, and convert them into avinput format for functional annotation by ANNOVAR.
 ## Requirment
-- python==3.6
 - biopython==1.78
 - pandas==1.1.5
 - numpy==1.19.5
 
 - Cas-OFFinder==3.0.0b3
+- CALITAS
 - RNAstructure==6.4
 ## Usage:
 ### Overall direction
