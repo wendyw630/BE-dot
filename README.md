@@ -13,7 +13,7 @@ When predicting off-target profiles of single base editing systems, BE-dot integ
 - Cas-OFFinder==3.0.0b3
 - RNAstructure==6.4
 ## Usage:
-# Overall direction
+### Overall direction
 ```
 python3 BE-dot.py
 usage: BE-dot.py
@@ -38,7 +38,7 @@ optional arguments:
   -h, --help            show this help message and exit
                  
 ```
-# For designsgRNA_opt1:
+### For designsgRNA_opt1:
 ```
 usage: BE-dot.py designsgRNA_opt1 [-h] --jobID JOBID --upSeq <seq> --downSeq
                                   <seq> --mut MUT --wt WT
@@ -56,7 +56,7 @@ optional arguments:
                         Path of output file(s)
 
 ```
-# For designsgRNA_opt2:
+### For designsgRNA_opt2:
 ```
 usage: BE-dot.py designsgRNA_opt2 [-h] --rsID RSID [-o OUTPUTPATH]
 
@@ -66,7 +66,7 @@ optional arguments:
   -o OUTPUTPATH, --outputPath OUTPUTPATH
                         Path of output file(s)
 ```
-# For OTprediction:
+### For OTprediction:
 ```
 usage: BE-dot.py OTprediction [-h] -BE BE -grna GRNA -onpam ONPAM
                               [-genome <file>] [-mis MISMATCH_NUMBER]
@@ -91,7 +91,7 @@ optional arguments:
                         Path of output file(s)
 
 ```
-# For OTannotation:
+### For OTannotation:
 ```
 usage: BE-dot.py OTannotation [-h] [-BE BASE_EDITOR] [-i INPUT_FILE]
                               [-o OUTPUTPATH]
