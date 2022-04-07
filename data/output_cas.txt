@@ -1,9 +1,0 @@
-#Id     Bulge Type      crRNA   DNA     Chromosome      Location        Direction       Mismatches      Bulge Size
-0       X       AAATCTTAGAGCGTCCCATCNNN AAATCTTAGAGtGTCCCATCTGG 17 dna_sm:chromosome chromosome:GRCh38:17:1:83257441:1 REF      43124016        -       1       0
-0       X       AAATCTTAGAGCGTCCCATCNNN AAATCTTAcAGtGTCCaATCTGG 17 dna_sm:chromosome chromosome:GRCh38:17:1:83257441:1 REF      43168169        -       3       0
-0       X       AAATCTTAGAGCGTCCCATCNNN AAATtTTAGAGgGTCCCATaAGG 14 dna_sm:chromosome chromosome:GRCh38:14:1:107043718:1 REF     78409864        +       3       0
-0       X       AAATCTTAGAGCGTCCCATCNNN AAATCTTAGAGCagaCCATCTGG 21 dna_sm:chromosome chromosome:GRCh38:21:1:46709983:1 REF      20364525        +       3       0
-0       RNA     AAATCTTAGAGCGTCCCATCNNN AAt-CTTAGAGtGTCCCATCTGG 17 dna_sm:chromosome chromosome:GRCh38:17:1:83257441:1 REF      43124017        -       2       1
-0       RNA     AAATCTTAGAGCGTCCCATCNNN AgA-CTTAGAGCaTCCCAgCTGG 2 dna_sm:chromosome chromosome:GRCh38:2:1:242193529:1 REF       112871140       -       3       1
-0       RNA     AAATCTTAGAGCGTCCCATCNNN tAA-gTTAGAGgGTCCCATCTGG 20 dna_sm:chromosome chromosome:GRCh38:20:1:64444167:1 REF      4654983 +       3       1
-0       RNA     AAATCTTAGAGCGTCCCATCNNN AAA-CTcAGAGCtTCCCAgCTGG 4 dna_sm:chromosome chromosome:GRCh38:4:1:190214555:1 REF       83667155        +       3       1
