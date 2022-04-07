@@ -28,8 +28,7 @@ def cas_offinder_input(be, grna, genome, mis, DNAbulge, RNAbulge):
         f.write(grna[:20] + 'N' * len(pam) + "\t" + str(mis))
         f.close()
         print("Search candidate off-target sites by Cas-OFFinder")
-        os.system(
-            "./cas-offinder /root/project/data/cas_in_{0}.txt C /root/project/data/cas_out_{0}.txt".format(sample_name))
+        os.system("./cas-offinder /usr/local/data/cas_in_{0}.txt C /usr/local/data/cas_out_{0}.txt".format(sample_name))
     if not pam:
         exit("the input BE is not in BE-dot")
 
@@ -37,7 +36,7 @@ def cas_offinder_input(be, grna, genome, mis, DNAbulge, RNAbulge):
 #######  get POT list of gRNA based on CALITAS
 # eg:
 #  AAAAAAAAAAACTTTTCCCGGnrg
-### output:/root/project/data/calitas_${sample}.txt
+### output:/usr/local/data/calitas_${sample}.txt
 def calitas_input(grna, mis, DNAbulge, RNAbulge):
     if pam:
         grna_pam = str(grna).upper() + str(pam).lower()
@@ -49,13 +48,13 @@ def calitas_input(grna, mis, DNAbulge, RNAbulge):
 
 
 def OT_predict(be, grna):
-    ###########   生成 BEdeepoff输入文件，并运行  ############
+    ###########   write BEdeepoff inputfile，run BEdeepoff  ############
     if be in CBElist:
         BE_type = "CBE"
     if be in ABElist:
         BE_type = "ABE"
-    infile = r'D:\00_project\predict\BE_dot_02\data\cas_out_{0}.txt'.format(sample_name)
-    input_file = Path(infile)  ##eg: r'D:\00_project\predict\BE_dot_02\data\casoffinder_BE_PLUS_AAAT.txt'
+    infile = r'/usr/local/data/cas_out_{0}.txt'.format(sample_name)
+    input_file = Path(infile)  
     stem = input_file.stem
     output_dir = utils.safe_makedir(input_file.parent / 'eff_input')
     output_file = input_file.parent / 'eff_input' / (str(input_file.stem) + '_BEdeep.txt')
@@ -83,7 +82,7 @@ def OT_predict(be, grna):
         ###########  extract no-bulge OTs  ##########
         df_0bulge = df_inputs[df_inputs['#Bulge_type'] == "X"]
 
-        ######   按行运行CFD   ######
+        ######   run CFD by rows  ######
         print('Predict with CFD')
         df_0bulge['CFD'] = df_0bulge.apply(lambda row: calcCfdScore(row['crRNA'], row['DNA']), axis=1)
 
@@ -91,11 +90,9 @@ def OT_predict(be, grna):
         ###### uCRISPR score ######
         print('Predict with uCRISPR')
         os.system("./ucrispr.sh ")
-        fucr = pd.read_csv('data/ucrispr.out', sep=' ', low_memory=False)
+        fucr = pd.read_csv('/usr/local/data/ucrispr.out', sep=' ', low_memory=False)
         df_0bulge= pd.concat([df_0bulge, fucr['uCRISPR']], axis=1)
-        df_0bulge.to_csv(r'D:\00_project\predict\BE_dot_02\data\cas_out_{0}_0bulge.txt'.format(sample_name), sep='\t',
+        df_0bulge.to_csv(r'/usr/local/data/cas_out_{0}_0bulge.txt'.format(sample_name), sep='\t',
                          index=False)
-
-
 
 
