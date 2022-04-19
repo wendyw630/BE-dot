@@ -1,0 +1,4 @@
+#BE	PAM	activity_window_start	activity_window_end	editing_substrate	editing_product	gRNA_Upstream_or_Downstream_toPAM
+CDA1-BE4max	NGG	1	8	C	T	u
+Cas12a-BE	TTTV	9	11	C	T	d	
+ABESa	NNGRRT	5	11	A	G	u
