@@ -1,0 +1,2 @@
+snp	synonymous_BE-grna
+rs80357410	Sa(KKH)-BE3:ATCTTAGAGCGTCCCATCTGgtaagt efficiency: unknown 	BE-PLUS:AAATCTTAGAGCGTCCCATCtgg efficiency: unknown 	CP-CBEmax variants:
